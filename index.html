@@ -3,27 +3,24 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>DEEPA STORE</title>
+  <title>DEEPA STORE - Demo (Modal Ditingkatkan)</title>
   <style>
-    :root{ --bg:#f5f7fa; --card:#ffffff; --muted:#6b7280; --accent:#0ea5a4; --glass: rgba(255,255,255,0.6); --shadow: 0 6px 18px rgba(15,23,42,0.08); font-family:'Mecha', sans-serif; }
+    :root{ --bg:#f5f7fa; --card:#ffffff; --muted:#6b7280; --accent:#0ea5a4; --glass: rgba(255,255,255,0.6); --shadow: 0 6px 18px rgba(15,23,42,0.08); font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial; }
     *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:#0f172a;line-height:1.4}
+    body{margin:0;background:var(--bg);color:#0f172a;line-height:1.5}
     .container{max-width:1100px;margin:36px auto;padding:20px}
 
-    /* Header */
     header{display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;width:100%;left:0;right:0;background:linear-gradient(135deg,#d9efff,#ffffff,#cfe9ff,#ffffff);background-size:400% 400%;animation:headerGradientBlueWhite 12s ease infinite;backdrop-filter:blur(6px);padding:14px 20px;border-bottom:1px solid rgba(15,23,42,0.05);z-index:50;border-bottom-left-radius:18px;border-bottom-right-radius:18px;} 
     header h1{font-size:20px;margin:0}
 
-    /* screen-reader only */
     .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
-    /* grid */
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
     .card{background:var(--card);border-radius:12px;padding:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
 
     .thumb{display:flex;align-items:center;gap:10px}
-    .icon-box{width:56px;height:56px;border-radius:8px;background:linear-gradient(135deg,var(--glass),#eef3f7);display:flex;align-items:center;justify-content:center;font-weight:700}
-    .icon-box svg{width:28px;height:28px;opacity:0.9}
+    .icon-box{width:56px;height:56px;border-radius:8px;background:linear-gradient(135deg,var(--glass),#eef3f7);display:flex;align-items:center;justify-content:center;font-weight:700;overflow:hidden;flex:0 0 auto}
+    .icon-box img.prod-icon{width:100%;height:100%;object-fit:cover;display:block}
 
     .title{font-weight:600;margin:0;font-size:15px}
     .desc{margin:0;color:var(--muted);font-size:13px}
@@ -34,39 +31,40 @@
 
     .btn{border:0;padding:8px 10px;border-radius:8px;font-weight:600;cursor:pointer}
     .btn.detail{background:#eef2ff;color:#3730a3}
-    .btn.wa{background:linear-gradient(135deg,#60a5fa,#93c5fd);color:#fff}
+    .btn.wa{background:linear-gradient(135deg,#60a5fa,#3b82f6);color:#fff}
 
-    /* special products */
     .special-products{margin-top:28px}
     .special-products .grid{gap:12px}
     .special-products .card{border:2px solid rgba(96,165,250,0.08)}
     .special-products .card .icon-box{width:64px;height:64px}
 
-    /* testimonial */
     .testi-section{margin-top:36px}
     .testi-grid{display:flex;gap:12px;flex-wrap:wrap}
     .testi{width:120px;height:120px;border-radius:10px;overflow:hidden;box-shadow:var(--shadow);background:#fff}
     .testi img{width:100%;height:100%;object-fit:cover;display:block}
 
-    /* modal */
-    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.5);padding:20px}
+    /* Improved modal styles */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.45);padding:20px;z-index:200}
     .modal.open{display:flex}
-    .modal-card{width:100%;max-width:720px;background:var(--card);border-radius:12px;padding:18px;box-shadow:var(--shadow)}
-    .modal-header{display:flex;justify-content:space-between;align-items:center}
-    .close{border:0;background:transparent;font-size:18px;cursor:pointer}
+    .modal-card{width:100%;max-width:560px;background:var(--card);border-radius:14px;padding:18px;box-shadow:0 18px 40px rgba(2,6,23,0.25);border:1px solid rgba(2,6,23,0.04);display:flex;flex-direction:column;gap:12px}
+    .modal-header{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .modal-title{font-size:18px;margin:0;font-weight:700}
+    .modal-body{color:var(--muted);font-size:14px;background:linear-gradient(180deg,#fbfdff,#ffffff);padding:12px;border-radius:10px;border:1px solid rgba(2,6,23,0.03)}
+    .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:6px}
+    .close{border:0;background:transparent;font-size:18px;cursor:pointer;color:var(--muted)}
+    #modal-image{display:none} /* hide image entirely for this modal variant */
+    #modal-price{display:none} /* hide price */
 
     .profile-img{width:44px;height:44px;border-radius:999px;object-fit:cover;border:2px solid rgba(0,0,0,0.06)}
 
     @keyframes headerGradientBlueWhite {0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 
-    @media (max-width:560px){.icon-box{width:48px;height:48px}.testi{width:88px;height:88px}}
+    @media (max-width:560px){.icon-box{width:48px;height:48px}.testi{width:88px;height:88px}.modal-card{margin:12px}}
 
-    /* announcement bar */
     .announcement-bar{width:100%;overflow:hidden;white-space:nowrap;background:#9cc7e6;color:#fff;padding:8px 0;margin-bottom:10px;position:relative}
     .announcement-text{display:inline-block;padding-left:100%;animation:scroll-left 12s linear infinite;font-size:14px;font-weight:600;color:#ffffff}
     @keyframes scroll-left{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
 
-    /* side menu */
     .side-menu{position:fixed;right:12px;top:120px;width:220px;background:rgba(255,255,255,0.92);backdrop-filter:blur(6px);padding:10px;border-radius:10px;box-shadow:0 8px 24px rgba(2,6,23,0.08);z-index:80}
     .side-menu h4{margin:0 0 8px 0;font-size:14px}
     .side-menu ul{list-style:none;padding:0;margin:0}
@@ -75,7 +73,6 @@
     .side-menu a:hover{background:rgba(96,165,250,0.08)}
     @media (max-width:900px){.side-menu{display:none}}
 
-    /* polish */
     :root{--transition:200ms}
     button{transition:transform var(--transition),box-shadow var(--transition)}
     .btn{transition:background-color var(--transition),transform var(--transition)}
@@ -84,10 +81,10 @@
     header{transition:box-shadow 300ms,background 600ms}
     .announcement-bar{transition:background 300ms}
     #search-box{transition:transform 180ms ease,opacity 180ms ease}
-
     @media (max-width:720px){.container{padding:12px}header div[style*="max-width:1100px"]{padding-left:8px}.profile-img{width:40px;height:40px}.side-menu{display:none}}
 
-    @font-face{ font-family:'Mecha'; src:url('https://fonts.cdnfonts.com/s/9920/Mecha.woff') format('woff'); font-weight:normal; font-style:normal; font-display:swap; }
+    /* Small helper */
+    .muted-small{font-size:13px;color:var(--muted)}
   </style>
 </head>
 <body>
@@ -95,7 +92,7 @@
     <div style="display:flex;align-items:center;gap:12px;max-width:1100px;margin:0;width:100%;padding:0 20px 0 0;">
       <img src="https://picsum.photos/seed/profile/80/80" alt="Foto Profil" class="profile-img">
       <div>
-        <h1>DEEPA STORE</h1>
+        <h1>DEEPA STORE - Demo</h1>
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:14px;padding:0 20px;">
@@ -111,11 +108,10 @@
   </div>
 
   <div class="announcement-bar">
-    <div class="announcement-text">BELUM ADA PROMK CUY</div>
+    <div class="announcement-text">DEMO: Klik sembarang untuk memulai musik (jika browser mengizinkan)</div>
   </div>
 
   <audio id="bg-audio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" preload="auto" loop></audio>
-  <!-- audio toggle at bottom-right -->
   <button id="audio-toggle" aria-pressed="false" title="Matikan/nyalakan musik" style="position:fixed;bottom:18px;right:18px;border:0;background:#fff;padding:12px;border-radius:999px;box-shadow:0 6px 18px rgba(2,6,23,0.15);cursor:pointer;z-index:80">🔈</button>
 
   <div class="container">
@@ -124,7 +120,6 @@
         <div class="grid" id="product-grid"></div>
       </section>
 
-      <!-- Special Products Section -->
       <section class="special-products" aria-label="Produk Khusus">
         <h2 style="font-size:16px;margin:0 0 12px 0">DISNEY</h2>
         <div class="grid" id="special-grid"></div>
@@ -138,25 +133,26 @@
   </div>
 
   <div id="modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="modal-card">
+    <div class="modal-card" role="document">
       <div class="modal-header">
         <div>
-          <h3 id="modal-title" style="margin:0">Nama Produk</h3>
-          <p id="modal-price" style="margin:4px 0 0 0;color:var(--muted)"></p>
+          <h3 id="modal-title" class="modal-title">Nama Produk</h3>
+          <p id="modal-sub" class="muted-small" style="margin:6px 0 0 0">Klik tombol di kanan bawah untuk chat WhatsApp</p>
         </div>
         <button class="close" id="modal-close" aria-label="Tutup">✕</button>
       </div>
-      <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap">
-        <div style="flex:1;min-width:200px"><img id="modal-image" src="https://picsum.photos/600/400?random=1" alt="Foto produk" style="width:100%;height:auto;border-radius:8px;display:block"></div>
-        <div style="flex:1;min-width:200px"><p id="modal-desc" style="color:var(--muted)"></p>
-          <div style="margin-top:10px"><button class="btn wa" id="modal-wa">Chat WhatsApp</button> </div>
-        </div>
+
+      <div class="modal-body" id="modal-body">
+        <p id="modal-desc" style="margin:0">Deskripsi produk akan muncul di sini.</p>
+      </div>
+
+      <div class="modal-actions">
+        <button id="modal-wa" class="btn wa">Chat WhatsApp</button>
       </div>
     </div>
   </div>
 
   <script>
-    // -- Elements
     const searchBtn = document.getElementById('search-btn');
     const searchBox = document.getElementById('search-box');
     const searchInput = document.getElementById('search-input');
@@ -166,36 +162,32 @@
     const modal = document.getElementById('modal');
     const modalClose = document.getElementById('modal-close');
     const modalTitle = document.getElementById('modal-title');
-    const modalPrice = document.getElementById('modal-price');
     const modalDesc = document.getElementById('modal-desc');
-    const modalImage = document.getElementById('modal-image');
     const modalWA = document.getElementById('modal-wa');
     const bgAudio = document.getElementById('bg-audio');
     const audioToggle = document.getElementById('audio-toggle');
 
-    // -- Data
     const phoneNumber = '6281717622225';
     const products = [
-      {id:1,name:'WhatsApp',price:8000,desc:'Garansi verif 10 hari',image:'https://picsum.photos/seed/kopi/800/600'},
-      {id:2,name:'Gojek',price:3000,desc:'Tidak ada garansi',image:'https://picsum.photos/seed/tas/800/600'},
-      {id:3,name:'Telegram',price:8000,desc:'Tidak ada garansi',image:'https://picsum.photos/seed/lampu/800/600'},
-      {id:4,name:'Gmail',price:2500,desc:'Garansi verif 10 hari',image:'https://picsum.photos/seed/buku/800/600'},
-      {id:5,name:'KopKen',price:2500,desc:'Tidak ada garansi',image:'https://picsum.photos/seed/sepatu/800/600'},
-      {id:6,name:'Lazada',price:2000,desc:'Garansi verif 3 hari',image:'https://picsum.photos/seed/botol/800/600'}
+      {id:1,name:'WhatsApp',price:8000,desc:'Garansi verif 10 hari. Link cepat dan aman.',image:'https://picsum.photos/seed/kopi/800/600'},
+      {id:2,name:'Gojek',price:3000,desc:'Tidak ada garansi — membeli sesuai kebijakan.',image:'https://picsum.photos/seed/tas/800/600'},
+      {id:3,name:'Telegram',price:8000,desc:'Tidak ada garansi.',image:'https://picsum.photos/seed/lampu/800/600'},
+      {id:4,name:'Gmail',price:2500,desc:'Garansi verif 10 hari. Support 24/7.',image:'https://picsum.photos/seed/buku/800/600'},
+      {id:5,name:'KopKen',price:2500,desc:'Tidak ada garansi. Produk populer.',image:'https://picsum.photos/seed/sepatu/800/600'},
+      {id:6,name:'Lazada',price:2000,desc:'Garansi verif 3 hari.',image:'https://picsum.photos/seed/botol/800/600'}
     ];
 
     const testimonials = [
-      'https://image2url.com/images/1765481326246-521acb88-af2a-4987-86cb-c4b6334b7854.jpg',
+      'https://picsum.photos/seed/testi1/800/800',
       'https://picsum.photos/seed/testi2/400/400',
       'https://picsum.photos/seed/testi3/400/400',
       'https://picsum.photos/seed/testi4/400/400'
     ];
 
     const specialProducts = [
-      {id:101,name:'DISNEY PREMIUM',price:30000,desc:'Premium Plan Antilimit',image:'https://picsum.photos/seed/special3/800/600'}
+      {id:101,name:'DISNEY PREMIUM',price:30000,desc:'Premium Plan Antilimit — akses eksklusif untuk koleksi Disney.',image:'https://picsum.photos/seed/special3/800/600'}
     ];
 
-    // -- Rendering functions
     function renderProducts(){
       if(!grid) return;
       grid.innerHTML = '';
@@ -204,7 +196,9 @@
         el.className = 'card';
         el.innerHTML = `
           <div class="thumb">
-            <div class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="ikonn.jpg"><rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" stroke-width="1.5"/></svg></div>
+            <div class="icon-box" aria-hidden="true">
+              <img class="prod-icon" src="${p.image}" alt="${p.name} thumbnail">
+            </div>
             <div style="flex:1"><h3 class="title">${p.name}</h3><p class="desc">${p.desc}</p></div>
           </div>
           <div class="price-row"><div class="price">Rp ${p.price.toLocaleString('id-ID')}</div>
@@ -223,7 +217,9 @@
         el.id = 'special-' + p.id;
         el.innerHTML = `
           <div class="thumb">
-            <div class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="ikonn.jpg"><rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" stroke-width="1.5"/></svg></div>
+            <div class="icon-box" aria-hidden="true">
+              <img class="prod-icon" src="${p.image}" alt="${p.name} thumbnail">
+            </div>
             <div style="flex:1"><h3 class="title">${p.name}</h3><p class="desc">${p.desc}</p></div>
           </div>
           <div class="price-row"><div class="price">Rp ${p.price.toLocaleString('id-ID')}</div>
@@ -244,9 +240,7 @@
       });
     }
 
-    // -- Side menu builder
     function buildSideMenu(){
-      // remove existing if any
       const existing = document.querySelector('.side-menu');
       if(existing) existing.remove();
       if(!specialProducts || specialProducts.length===0) return;
@@ -263,9 +257,7 @@
       });
     }
 
-    // -- Event handling (delegated)
     document.addEventListener('click', (e)=>{
-      // search button
       const btn = e.target.closest && e.target.closest('#search-btn');
       if(btn){
         e.stopPropagation();
@@ -277,7 +269,6 @@
         return;
       }
 
-      // click on product detail / wa buttons
       const detailBtn = e.target.closest && e.target.closest('.btn.detail');
       const waBtn = e.target.closest && e.target.closest('.btn.wa');
       if(detailBtn){
@@ -298,13 +289,11 @@
         return;
       }
 
-      // close search if click outside
       const isSearchBox = e.target.closest && e.target.closest('#search-box');
       const isSearchBtn = e.target.closest && e.target.closest('#search-btn');
       if(!isSearchBox && !isSearchBtn){ if(searchBox) searchBox.style.display = 'none'; }
     });
 
-    // search input filtering
     if(searchInput){
       searchInput.addEventListener('input', ()=>{
         const term = searchInput.value.toLowerCase();
@@ -319,48 +308,81 @@
       });
     }
 
-    // modal functions
+    // Updated openModal: only show title + description + WA button (clean layout)
     function openModal(p){
       if(!modal) return;
-      modalTitle.textContent = p.name;
-      modalPrice.textContent = 'Rp ' + p.price.toLocaleString('id-ID');
-      modalDesc.textContent = p.desc || '';
-      modalImage.src = p.image || '';
+      modalTitle.textContent = p.name || 'Produk';
+      const body = document.getElementById('modal-body');
+      const descEl = document.getElementById('modal-desc');
+      descEl.textContent = p.desc || 'Tidak ada deskripsi.';
+      // Ensure WA button links to correct product info
+      if(modalWA){
+        modalWA.style.display = 'inline-block';
+        modalWA.onclick = ()=>{ 
+          const text = encodeURIComponent(`Halo, saya tertarik dengan produk *${p.name}* (ID: ${p.id}). Harga: Rp ${p.price.toLocaleString('id-ID')}. Apakah masih tersedia?`);
+          window.open(`https://wa.me/${phoneNumber}?text=${text}`, '_blank');
+        };
+      }
       modal.classList.add('open');
       modal.setAttribute('aria-hidden','false');
-      if(modalWA){
-        modalWA.onclick = ()=>{ const text = encodeURIComponent(`Halo, saya mau tanyakan tentang *${p.name}* (ID: ${p.id})`); window.open(`https://wa.me/${phoneNumber}?text=${text}`, '_blank'); };
-      }
+      // focus for accessibility
+      setTimeout(()=>{ modalClose.focus(); }, 120);
     }
     function closeModal(){ if(modal){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); } }
     if(modalClose) modalClose.addEventListener('click', closeModal);
     if(modal) modal.addEventListener('click', (e)=>{ if(e.target===modal) closeModal(); });
 
-    // phone display
     const phoneEl = document.getElementById('phone-display');
     if(phoneEl){ phoneEl.textContent = '+62 ' + phoneNumber.slice(2,6) + '-' + phoneNumber.slice(6,10) + '-' + phoneNumber.slice(10); }
 
-    // audio: play on first click OR toggle via button
-    if(bgAudio){ bgAudio.loop = true; bgAudio.preload = 'auto'; bgAudio.pause(); }
-    function updateAudioToggleUI(playing){ if(!audioToggle) return; audioToggle.textContent = playing ? '🔊' : '🔈'; audioToggle.setAttribute('aria-pressed', playing ? 'true' : 'false'); }
-    function tryPlayAudio(){ if(!bgAudio) return; bgAudio.play().then(()=>{ updateAudioToggleUI(true); }).catch(()=>{}); }
-    // play once on first user interaction (click) to satisfy browsers
-    function onFirstUserInteraction(){ tryPlayAudio(); document.removeEventListener('click', onFirstUserInteraction); document.removeEventListener('touchstart', onFirstUserInteraction); }
-    document.addEventListener('click', onFirstUserInteraction);
-    document.addEventListener('touchstart', onFirstUserInteraction);
-    if(audioToggle){ audioToggle.addEventListener('click', (e)=>{ e.stopPropagation(); if(bgAudio.paused){ bgAudio.play().then(()=>{ updateAudioToggleUI(true); }).catch(()=>{}); } else { bgAudio.pause(); updateAudioToggleUI(false); } }); }
+    if(bgAudio){
+      bgAudio.loop = true;
+      bgAudio.preload = 'auto';
+      try { bgAudio.pause(); } catch (err) {}
+    }
 
-    // keyboard: ESC closes search
+    function updateAudioToggleUI(playing){
+      if(!audioToggle) return;
+      audioToggle.textContent = playing ? '🔊' : '🔈';
+      audioToggle.setAttribute('aria-pressed', playing ? 'true' : 'false');
+    }
+
+    function tryPlayAudio(){
+      if(!bgAudio) return;
+      bgAudio.play().then(()=>{ updateAudioToggleUI(true); }).catch(()=>{ updateAudioToggleUI(!bgAudio.paused); });
+    }
+
+    function onFirstUserInteraction(event){
+      tryPlayAudio();
+    }
+
+    document.addEventListener('pointerdown', onFirstUserInteraction, {once:true});
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar'){
+        onFirstUserInteraction(e);
+      }
+    }, {once:true});
+
+    if(audioToggle){
+      updateAudioToggleUI(!bgAudio || !bgAudio.paused);
+      audioToggle.addEventListener('click', (e)=>{
+        e.preventDefault();
+        if(!bgAudio) return;
+        if(bgAudio.paused){
+          bgAudio.play().then(()=>{ updateAudioToggleUI(true); }).catch(()=>{ updateAudioToggleUI(!bgAudio.paused); });
+        } else {
+          bgAudio.pause();
+          updateAudioToggleUI(false);
+        }
+      });
+    }
+
     document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape'){ if(searchBox) searchBox.style.display = 'none'; closeModal(); } });
 
-    // render everything on load
     renderProducts(); renderSpecials(); renderTestimonials();
 
-    // make product items focusable
     document.addEventListener('DOMContentLoaded', ()=>{ document.querySelectorAll('#product-grid article, #special-grid article').forEach(a=>a.setAttribute('tabindex','0')); });
 
-    // --- Image Lightbox for testimonials ---
-    // inject lightbox HTML
     const lightboxHtml = `
       <div id="img-lightbox" class="lightbox" style="display:none;position:fixed;inset:0;background:rgba(2,6,23,0.85);align-items:center;justify-content:center;z-index:120;padding:20px">
         <button id="lightbox-close" aria-label="Tutup" style="position:absolute;top:18px;right:18px;border:0;background:transparent;color:#fff;font-size:28px;cursor:pointer">✕</button>
@@ -372,7 +394,6 @@
     const lightboxImg = document.getElementById('lightbox-img');
     const lightboxClose = document.getElementById('lightbox-close');
 
-    // Open lightbox when clicking a testimonial image
     document.addEventListener('click', (e)=>{
       const img = e.target.closest && e.target.closest('.testi img');
       if(img){
@@ -382,7 +403,6 @@
       }
     });
 
-    // Close handlers
     if(lightboxClose) lightboxClose.addEventListener('click', ()=>{ if(lightbox) lightbox.style.display = 'none'; });
     if(lightbox) lightbox.addEventListener('click', (e)=>{ if(e.target === lightbox){ lightbox.style.display = 'none'; } });
     document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape'){ if(lightbox) lightbox.style.display = 'none'; } });
@@ -390,3 +410,11 @@
   </script>
 </body>
 </html>
+"""
+
+path = "/mnt/data/demo_deepa_store_modal_updated.html"
+with open(path, "w", encoding="utf-8") as f:
+    f.write(html)
+
+print(f"Saved updated demo to: {path}")
+
