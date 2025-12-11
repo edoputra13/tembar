@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Toko Produk — Demo</title>
+  <style>
+    :root{ --bg:#f5f7fa; --card:#ffffff; --muted:#6b7280; --accent:#0ea5a4; --glass: rgba(255,255,255,0.6); --shadow: 0 6px 18px rgba(15,23,42,0.08); font-family:'Mecha', sans-serif; }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:#0f172a;line-height:1.4}
+    .container{max-width:1100px;margin:36px auto;padding:20px}
+
+    /* Header */
+    header{display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;width:100%;left:0;right:0;background:linear-gradient(135deg,#d9efff,#ffffff,#cfe9ff,#ffffff);background-size:400% 400%;animation:headerGradientBlueWhite 12s ease infinite;backdrop-filter:blur(6px);padding:14px 20px;border-bottom:1px solid rgba(15,23,42,0.05);z-index:50;border-bottom-left-radius:18px;border-bottom-right-radius:18px;} 
+    header h1{font-size:20px;margin:0}
+
+    /* screen-reader only */
+    .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+    /* grid */
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+    .card{background:var(--card);border-radius:12px;padding:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
+
+    .thumb{display:flex;align-items:center;gap:10px}
+    .icon-box{width:56px;height:56px;border-radius:8px;background:linear-gradient(135deg,var(--glass),#eef3f7);display:flex;align-items:center;justify-content:center;font-weight:700}
+    .icon-box svg{width:28px;height:28px;opacity:0.9}
+
+    .title{font-weight:600;margin:0;font-size:15px}
+    .desc{margin:0;color:var(--muted);font-size:13px}
+
+    .price-row{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+    .price{font-weight:700}
+    .actions{display:flex;gap:8px}
+
+    .btn{border:0;padding:8px 10px;border-radius:8px;font-weight:600;cursor:pointer}
+    .btn.detail{background:#eef2ff;color:#3730a3}
+    .btn.wa{background:linear-gradient(135deg,#60a5fa,#93c5fd);color:#fff}
+
+    /* special products */
+    .special-products{margin-top:28px}
+    .special-products .grid{gap:12px}
+    .special-products .card{border:2px solid rgba(96,165,250,0.08)}
+    .special-products .card .icon-box{width:64px;height:64px}
+
+    /* testimonial */
+    .testi-section{margin-top:36px}
+    .testi-grid{display:flex;gap:12px;flex-wrap:wrap}
+    .testi{width:120px;height:120px;border-radius:10px;overflow:hidden;box-shadow:var(--shadow);background:#fff}
+    .testi img{width:100%;height:100%;object-fit:cover;display:block}
+
+    /* modal */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.5);padding:20px}
+    .modal.open{display:flex}
+    .modal-card{width:100%;max-width:720px;background:var(--card);border-radius:12px;padding:18px;box-shadow:var(--shadow)}
+    .modal-header{display:flex;justify-content:space-between;align-items:center}
+    .close{border:0;background:transparent;font-size:18px;cursor:pointer}
+
+    .profile-img{width:44px;height:44px;border-radius:999px;object-fit:cover;border:2px solid rgba(0,0,0,0.06)}
+
+    @keyframes headerGradientBlueWhite {0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+    @media (max-width:560px){.icon-box{width:48px;height:48px}.testi{width:88px;height:88px}}
+
+    /* announcement bar */
+    .announcement-bar{width:100%;overflow:hidden;white-space:nowrap;background:#9cc7e6;color:#fff;padding:8px 0;margin-bottom:10px;position:relative}
+    .announcement-text{display:inline-block;padding-left:100%;animation:scroll-left 12s linear infinite;font-size:14px;font-weight:600;color:#ffffff}
+    @keyframes scroll-left{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+
+    /* side menu */
+    .side-menu{position:fixed;right:12px;top:120px;width:220px;background:rgba(255,255,255,0.92);backdrop-filter:blur(6px);padding:10px;border-radius:10px;box-shadow:0 8px 24px rgba(2,6,23,0.08);z-index:80}
+    .side-menu h4{margin:0 0 8px 0;font-size:14px}
+    .side-menu ul{list-style:none;padding:0;margin:0}
+    .side-menu li{margin:6px 0}
+    .side-menu a{display:block;padding:6px 8px;border-radius:8px;text-decoration:none;color:#0f172a;font-weight:600}
+    .side-menu a:hover{background:rgba(96,165,250,0.08)}
+    @media (max-width:900px){.side-menu{display:none}}
+
+    /* polish */
+    :root{--transition:200ms}
+    button{transition:transform var(--transition),box-shadow var(--transition)}
+    .btn{transition:background-color var(--transition),transform var(--transition)}
+    .btn:hover{transform:translateY(-2px)}
+    .btn:focus{outline:3px solid rgba(96,165,250,0.25);outline-offset:2px}
+    header{transition:box-shadow 300ms,background 600ms}
+    .announcement-bar{transition:background 300ms}
+    #search-box{transition:transform 180ms ease,opacity 180ms ease}
+
+    @media (max-width:720px){.container{padding:12px}header div[style*="max-width:1100px"]{padding-left:8px}.profile-img{width:40px;height:40px}.side-menu{display:none}}
+
+    @font-face{ font-family:'Mecha'; src:url('https://fonts.cdnfonts.com/s/9920/Mecha.woff') format('woff'); font-weight:normal; font-style:normal; font-display:swap; }
+  </style>
+</head>
+<body>
+  <header>
+    <div style="display:flex;align-items:center;gap:12px;max-width:1100px;margin:0;width:100%;padding:0 20px 0 0;">
+      <img src="https://picsum.photos/seed/profile/80/80" alt="Foto Profil" class="profile-img">
+      <div>
+        <h1>Toko Demo</h1>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;padding:0 20px;">
+      <span id="phone-display" class="sr-only" aria-hidden="true"></span>
+      <button id="search-btn" style="border:0;background:transparent;cursor:pointer;padding:6px" aria-label="Cari">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><line x1="16.65" y1="16.65" x2="21" y2="21" /></svg>
+      </button>
+    </div>
+  </header>
+
+  <div id="search-box" style="position:fixed;top:0;left:0;right:0;background:#ffffffee;backdrop-filter:blur(6px);padding:14px 20px;display:none;z-index:70;border-bottom:1px solid rgba(0,0,0,0.05)">
+    <input id="search-input" type="text" placeholder="Cari produk..." style="width:100%;padding:10px 14px;border-radius:10px;border:1px solid #cbd5e1;font-size:15px;outline:none">
+  </div>
+
+  <div class="announcement-bar">
+    <div class="announcement-text">Promo hari ini: Diskon hingga 30% untuk semua produk! Belanja sekarang sebelum kehabisan!</div>
+  </div>
+
+  <audio id="bg-audio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" preload="auto" loop></audio>
+  <!-- audio toggle at bottom-right -->
+  <button id="audio-toggle" aria-pressed="false" title="Matikan/nyalakan musik" style="position:fixed;bottom:18px;right:18px;border:0;background:#fff;padding:12px;border-radius:999px;box-shadow:0 6px 18px rgba(2,6,23,0.15);cursor:pointer;z-index:80">🔈</button>
+
+  <div class="container">
+    <main>
+      <section aria-label="Daftar Produk">
+        <div class="grid" id="product-grid"></div>
+      </section>
+
+      <!-- Special Products Section -->
+      <section class="special-products" aria-label="Produk Khusus">
+        <h2 style="font-size:16px;margin:0 0 12px 0">Produk Khusus</h2>
+        <div class="grid" id="special-grid"></div>
+      </section>
+
+      <section class="testi-section" aria-label="Testimoni">
+        <h2 style="font-size:16px;margin:0 0 12px 0">Testimoni Pelanggan</h2>
+        <div class="testi-grid" id="testi-grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h3 id="modal-title" style="margin:0">Nama Produk</h3>
+          <p id="modal-price" style="margin:4px 0 0 0;color:var(--muted)"></p>
+        </div>
+        <button class="close" id="modal-close" aria-label="Tutup">✕</button>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap">
+        <div style="flex:1;min-width:200px"><img id="modal-image" src="https://picsum.photos/600/400?random=1" alt="Foto produk" style="width:100%;height:auto;border-radius:8px;display:block"></div>
+        <div style="flex:1;min-width:200px"><p id="modal-desc" style="color:var(--muted)"></p>
+          <div style="margin-top:10px"><button class="btn wa" id="modal-wa">Chat WhatsApp</button> </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // -- Elements
+    const searchBtn = document.getElementById('search-btn');
+    const searchBox = document.getElementById('search-box');
+    const searchInput = document.getElementById('search-input');
+    const grid = document.getElementById('product-grid');
+    const specialGrid = document.getElementById('special-grid');
+    const testiGrid = document.getElementById('testi-grid');
+    const modal = document.getElementById('modal');
+    const modalClose = document.getElementById('modal-close');
+    const modalTitle = document.getElementById('modal-title');
+    const modalPrice = document.getElementById('modal-price');
+    const modalDesc = document.getElementById('modal-desc');
+    const modalImage = document.getElementById('modal-image');
+    const modalWA = document.getElementById('modal-wa');
+    const bgAudio = document.getElementById('bg-audio');
+    const audioToggle = document.getElementById('audio-toggle');
+
+    // -- Data
+    const phoneNumber = '6281234567890';
+    const products = [
+      {id:1,name:'Kopi Arabica',price:75000,desc:'Kopi bubuk pilihan, 250g',image:'https://picsum.photos/seed/kopi/800/600'},
+      {id:2,name:'Tas Kanvas',price:120000,desc:'Tahan lama, ukuran sedang',image:'https://picsum.photos/seed/tas/800/600'},
+      {id:3,name:'Lampu LED',price:95000,desc:'Hemat energi, terang',image:'https://picsum.photos/seed/lampu/800/600'},
+      {id:4,name:'Buku Catatan',price:35000,desc:'A5, 100 halaman',image:'https://picsum.photos/seed/buku/800/600'},
+      {id:5,name:'Sepatu Sneakers',price:325000,desc:'Nyaman untuk harian',image:'https://picsum.photos/seed/sepatu/800/600'},
+      {id:6,name:'Botol Minum',price:45000,desc:'BPA free, 500ml',image:'https://picsum.photos/seed/botol/800/600'}
+    ];
+
+    const testimonials = [
+      'https://picsum.photos/seed/testi1/400/400',
+      'https://picsum.photos/seed/testi2/400/400',
+      'https://picsum.photos/seed/testi3/400/400',
+      'https://picsum.photos/seed/testi4/400/400'
+    ];
+
+    const specialProducts = [
+      {id:101,name:'Paket Hemat Kopi',price:180000,desc:'Bundle 3x250g — hemat 15%',image:'https://picsum.photos/seed/special1/800/600'},
+      {id:102,name:'Edisi Terbatas Tas',price:220000,desc:'Desain eksklusif edisi terbatas',image:'https://picsum.photos/seed/special2/800/600'},
+      {id:103,name:'Lampu Smart',price:155000,desc:'Kontrol via aplikasi, hemat energi',image:'https://picsum.photos/seed/special3/800/600'}
+    ];
+
+    // -- Rendering functions
+    function renderProducts(){
+      if(!grid) return;
+      grid.innerHTML = '';
+      products.forEach(p=>{
+        const el = document.createElement('article');
+        el.className = 'card';
+        el.innerHTML = `
+          <div class="thumb">
+            <div class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" stroke-width="1.5"/></svg></div>
+            <div style="flex:1"><h3 class="title">${p.name}</h3><p class="desc">${p.desc}</p></div>
+          </div>
+          <div class="price-row"><div class="price">Rp ${p.price.toLocaleString('id-ID')}</div>
+            <div class="actions"><button class="btn detail" data-id="${p.id}">Detail</button><button class="btn wa" data-id="${p.id}">WhatsApp</button></div>
+          </div>`;
+        grid.appendChild(el);
+      });
+    }
+
+    function renderSpecials(){
+      if(!specialGrid) return;
+      specialGrid.innerHTML = '';
+      specialProducts.forEach(p=>{
+        const el = document.createElement('article');
+        el.className = 'card';
+        el.id = 'special-' + p.id;
+        el.innerHTML = `
+          <div class="thumb">
+            <div class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" stroke-width="1.5"/></svg></div>
+            <div style="flex:1"><h3 class="title">${p.name}</h3><p class="desc">${p.desc}</p></div>
+          </div>
+          <div class="price-row"><div class="price">Rp ${p.price.toLocaleString('id-ID')}</div>
+            <div class="actions"><button class="btn detail" data-id="${p.id}">Detail</button><button class="btn wa" data-id="${p.id}">WhatsApp</button></div>
+          </div>`;
+        specialGrid.appendChild(el);
+      });
+      buildSideMenu();
+    }
+
+    function renderTestimonials(){
+      if(!testiGrid) return;
+      testiGrid.innerHTML = '';
+      testimonials.forEach(src=>{
+        const d = document.createElement('div'); d.className='testi';
+        d.innerHTML = `<img src="${src}" alt="Foto testimoni">`;
+        testiGrid.appendChild(d);
+      });
+    }
+
+    // -- Side menu builder
+    function buildSideMenu(){
+      // remove existing if any
+      const existing = document.querySelector('.side-menu');
+      if(existing) existing.remove();
+      if(!specialProducts || specialProducts.length===0) return;
+      const nav = document.createElement('nav');
+      nav.className = 'side-menu';
+      nav.innerHTML = '<h4>Produk Khusus</h4><ul>' + specialProducts.map(p => `<li><a href="#special-${p.id}" data-target="#special-${p.id}">${p.name}</a></li>`).join('') + '</ul>';
+      document.body.appendChild(nav);
+      nav.querySelectorAll('a[data-target]').forEach(a=>{
+        a.addEventListener('click', function(ev){
+          ev.preventDefault();
+          const target = document.querySelector(this.getAttribute('data-target'));
+          if(target){ target.scrollIntoView({behavior:'smooth',block:'center'}); target.focus({preventScroll:true}); }
+        });
+      });
+    }
+
+    // -- Event handling (delegated)
+    document.addEventListener('click', (e)=>{
+      // search button
+      const btn = e.target.closest && e.target.closest('#search-btn');
+      if(btn){
+        e.stopPropagation();
+        if(searchBox){
+          const isOpen = searchBox.style.display === 'block';
+          searchBox.style.display = isOpen ? 'none' : 'block';
+          if(!isOpen && searchInput) setTimeout(()=>searchInput.focus(),40);
+        }
+        return;
+      }
+
+      // click on product detail / wa buttons
+      const detailBtn = e.target.closest && e.target.closest('.btn.detail');
+      const waBtn = e.target.closest && e.target.closest('.btn.wa');
+      if(detailBtn){
+        const id = Number(detailBtn.dataset.id);
+        const all = products.concat(specialProducts);
+        const p = all.find(x=>x.id===id);
+        if(p) openModal(p);
+        return;
+      }
+      if(waBtn){
+        const id = Number(waBtn.dataset.id);
+        const all = products.concat(specialProducts);
+        const p = all.find(x=>x.id===id);
+        if(p){
+          const text = encodeURIComponent(`Halo, saya tertarik dengan produk *${p.name}* (ID: ${p.id}). Harga: Rp ${p.price.toLocaleString('id-ID')}. Apakah masih tersedia?`);
+          window.open(`https://wa.me/${phoneNumber}?text=${text}`, '_blank');
+        }
+        return;
+      }
+
+      // close search if click outside
+      const isSearchBox = e.target.closest && e.target.closest('#search-box');
+      const isSearchBtn = e.target.closest && e.target.closest('#search-btn');
+      if(!isSearchBox && !isSearchBtn){ if(searchBox) searchBox.style.display = 'none'; }
+    });
+
+    // search input filtering
+    if(searchInput){
+      searchInput.addEventListener('input', ()=>{
+        const term = searchInput.value.toLowerCase();
+        document.querySelectorAll('#product-grid article, #special-grid article').forEach(item=>{
+          const titleEl = item.querySelector('.title');
+          const descEl = item.querySelector('.desc');
+          const title = titleEl ? titleEl.textContent.toLowerCase() : '';
+          const desc = descEl ? descEl.textContent.toLowerCase() : '';
+          const match = title.includes(term) || desc.includes(term);
+          item.style.display = match ? 'block' : 'none';
+        });
+      });
+    }
+
+    // modal functions
+    function openModal(p){
+      if(!modal) return;
+      modalTitle.textContent = p.name;
+      modalPrice.textContent = 'Rp ' + p.price.toLocaleString('id-ID');
+      modalDesc.textContent = p.desc || '';
+      modalImage.src = p.image || '';
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden','false');
+      if(modalWA){
+        modalWA.onclick = ()=>{ const text = encodeURIComponent(`Halo, saya mau tanyakan tentang *${p.name}* (ID: ${p.id})`); window.open(`https://wa.me/${phoneNumber}?text=${text}`, '_blank'); };
+      }
+    }
+    function closeModal(){ if(modal){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); } }
+    if(modalClose) modalClose.addEventListener('click', closeModal);
+    if(modal) modal.addEventListener('click', (e)=>{ if(e.target===modal) closeModal(); });
+
+    // phone display
+    const phoneEl = document.getElementById('phone-display');
+    if(phoneEl){ phoneEl.textContent = '+62 ' + phoneNumber.slice(2,6) + '-' + phoneNumber.slice(6,10) + '-' + phoneNumber.slice(10); }
+
+    // audio: play on first click OR toggle via button
+    if(bgAudio){ bgAudio.loop = true; bgAudio.preload = 'auto'; bgAudio.pause(); }
+    function updateAudioToggleUI(playing){ if(!audioToggle) return; audioToggle.textContent = playing ? '🔊' : '🔈'; audioToggle.setAttribute('aria-pressed', playing ? 'true' : 'false'); }
+    function tryPlayAudio(){ if(!bgAudio) return; bgAudio.play().then(()=>{ updateAudioToggleUI(true); }).catch(()=>{}); }
+    // play once on first user interaction (click) to satisfy browsers
+    function onFirstUserInteraction(){ tryPlayAudio(); document.removeEventListener('click', onFirstUserInteraction); document.removeEventListener('touchstart', onFirstUserInteraction); }
+    document.addEventListener('click', onFirstUserInteraction);
+    document.addEventListener('touchstart', onFirstUserInteraction);
+    if(audioToggle){ audioToggle.addEventListener('click', (e)=>{ e.stopPropagation(); if(bgAudio.paused){ bgAudio.play().then(()=>{ updateAudioToggleUI(true); }).catch(()=>{}); } else { bgAudio.pause(); updateAudioToggleUI(false); } }); }
+
+    // keyboard: ESC closes search
+    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape'){ if(searchBox) searchBox.style.display = 'none'; closeModal(); } });
+
+    // render everything on load
+    renderProducts(); renderSpecials(); renderTestimonials();
+
+    // make product items focusable
+    document.addEventListener('DOMContentLoaded', ()=>{ document.querySelectorAll('#product-grid article, #special-grid article').forEach(a=>a.setAttribute('tabindex','0')); });
+
+    // --- Image Lightbox for testimonials ---
+    // inject lightbox HTML
+    const lightboxHtml = `
+      <div id="img-lightbox" class="lightbox" style="display:none;position:fixed;inset:0;background:rgba(2,6,23,0.85);align-items:center;justify-content:center;z-index:120;padding:20px">
+        <button id="lightbox-close" aria-label="Tutup" style="position:absolute;top:18px;right:18px;border:0;background:transparent;color:#fff;font-size:28px;cursor:pointer">✕</button>
+        <img id="lightbox-img" src="" alt="Gambar Testimoni" style="max-width:100%;max-height:100%;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,0.6);display:block;">
+      </div>`;
+    document.body.insertAdjacentHTML('beforeend', lightboxHtml);
+
+    const lightbox = document.getElementById('img-lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxClose = document.getElementById('lightbox-close');
+
+    // Open lightbox when clicking a testimonial image
+    document.addEventListener('click', (e)=>{
+      const img = e.target.closest && e.target.closest('.testi img');
+      if(img){
+        const src = img.getAttribute('src');
+        if(lightboxImg){ lightboxImg.src = src; }
+        if(lightbox){ lightbox.style.display = 'flex'; }
+      }
+    });
+
+    // Close handlers
+    if(lightboxClose) lightboxClose.addEventListener('click', ()=>{ if(lightbox) lightbox.style.display = 'none'; });
+    if(lightbox) lightbox.addEventListener('click', (e)=>{ if(e.target === lightbox){ lightbox.style.display = 'none'; } });
+    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape'){ if(lightbox) lightbox.style.display = 'none'; } });
+
+  </script>
+</body>
+</html>
